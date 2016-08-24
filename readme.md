@@ -92,7 +92,7 @@ plt.waitforbuttonpress()
 ```
 
 ### Outlier: 
-some outlier still exist in the distorted disparity,you need to use stereo matching algorithm to remove them.
+some outlier still exist in the undistorted disparity,you need to use stereo matching algorithm to remove them.
 
 
 
