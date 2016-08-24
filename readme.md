@@ -1,6 +1,6 @@
 ###Pipeline:
  1. prepare calibration data
- 2. upload calibration data to kitti calibration server
+ 2. upload calibration data to [kitti calibration server](http://www.cvlibs.net/software/calibration/index.php)
  3. download the calibration result
  4. use this tool and rectify new data.
 
