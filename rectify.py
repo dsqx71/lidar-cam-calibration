@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 class Stereo_Lidar:
     
-    def __init__(self, input_dir = './'):
+    def __init__(self, input_dir = './', baseline = 0.57):
         
         # camera
         self.cam_mats = {"left": None, "right": None}
@@ -21,6 +21,7 @@ class Stereo_Lidar:
         
         # lidar
         
+        self.baseline = baseline # meter
         self.lidar_rot = None
         self.lidar_trans = None 
         self.T = None
@@ -151,7 +152,7 @@ class Stereo_Lidar:
         disparity = np.ones(depth.shape) * -1
         
         # our baseline : 57cm, width : 935 pixel
-        disparity = np.where(depth>0,(789.68925*0.57)/depth,-1)
+        disparity = np.where(depth>0,(789.68925*self.baseline)/depth,-1)
         
         for i in range(disparity.shape[0]):
             for j in range(disparity.shape[1]):
@@ -162,19 +163,21 @@ class Stereo_Lidar:
 
 
 
-
-
 def check_disparity(img1,img2,disparity):
     
     tot = 0
     for i in range(600,img1.shape[0]-50):
         for j in range(100,img1.shape[1]-50):
             if disparity[i,j] >0 and j-disparity[i,j]>=25:
-                if tot>20:
+                if tot>10:
                     break
                 print i,j,disparity[i,j]
                 plt.figure()
                 plt.imshow(img1[i-15:i+16,j-15:j+16])
+                plt.title('left patch : (%d,%d)' %(i,j))
+                plt.waitforbuttonpress()
                 plt.figure()
                 plt.imshow(img2[i-15:i+16,j-disparity[i,j]-15:j+16-disparity[i,j]])
+                plt.title('right patch :(%d,%d)' %(i,j-disparity[i,j]))
+                plt.waitforbuttonpress()
                 tot += 1
